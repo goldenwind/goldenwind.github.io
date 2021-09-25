@@ -1,9 +1,5 @@
 # PHP json_encode 函数详解
 
-[TOCM]
-
-[TOC]
-
 ## json_encode
 (PHP 5 >= 5.2.0, PHP 7, PHP 8, PECL json >= 1.2.0)
 
