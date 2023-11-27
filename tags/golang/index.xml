@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>golang on 千叶的博客</title><link>https://blog.ip21.cn/tags/golang/</link><description>Recent content in golang on 千叶的博客</description><generator>Hugo -- gohugo.io</generator><language>zh</language><managingEditor>qq1732322711@gmail.com (Goldenwind)</managingEditor><webMaster>qq1732322711@gmail.com (Goldenwind)</webMaster><copyright>2023 Goldenwind All rights reserved</copyright><lastBuildDate>Sun, 26 Nov 2023 21:34:36 +0800</lastBuildDate><atom:link href="https://blog.ip21.cn/tags/golang/index.xml" rel="self" type="application/rss+xml"/><item><title>golang语言中的深浅拷贝</title><link>https://blog.ip21.cn/blog/zh/deep-and-shallow-copies-in-the-golang-language/</link><pubDate>Sun, 26 Nov 2023 21:34:36 +0800</pubDate><author>qq1732322711@gmail.com (Goldenwind)</author><guid>https://blog.ip21.cn/blog/zh/deep-and-shallow-copies-in-the-golang-language/</guid><description>&lt;h2 id="golang语言中的深浅拷贝">golang语言中的深浅拷贝&lt;/h2>
+&lt;h3 id="浅拷贝">浅拷贝&lt;/h3>
+&lt;p>​ 在 Go 语言中，浅拷贝是指将一个对象的值复制到另一个新的对象中，但是这两个对象&lt;strong>共享相同的底层数据结构&lt;/strong>。也就是说，当其中一个对象修改数据时，另一个对象也会受到影响。&lt;/p>
+&lt;p>​ 在 Go 中，&lt;em>&lt;strong>基本类型的变量赋值和传递参数都是进行值拷贝，因此它们都是深拷贝&lt;/strong>&lt;/em>。例如，对于 int 类型的变量 x 和 y，执行 y = x 或者 func(a int) { &amp;hellip; }(x) 都是进行深拷贝。&lt;/p>
+&lt;p>​ 而对于非基本类型的变量，如 &lt;code>slice、map、channel、struct&lt;/code> 等，其复制操作是浅拷贝。例如，对于一个 slice 变量 s，执行 s1 := s 或者 func(a []int) { &amp;hellip; }(s) 都是进行浅拷贝。这意味着，对于 s1 的修改也会反映到原始的 s 变量上。&lt;/p>
+&lt;p>​ 需要注意的是，虽然浅拷贝有时能够提高程序的性能，但是如果不加注意地使用浅拷贝，就可能会导致出现预期之外的问题，比如数据竞争、并发访问冲突等。因此，在使用浅拷贝时，需要仔细考虑其可能带来的风险和副作用。&lt;/p>
+&lt;h3 id="深拷贝">深拷贝&lt;/h3>
+&lt;p>​ 在 Go 语言中，深拷贝是指将一个对象的值复制到另一个新的对象中，并且这两个对象&lt;strong>不共享相同的底层数据结构&lt;/strong>。也就是说，当其中一个对象修改数据时，另一个对象不会受到影响。&lt;/p>
+&lt;p>​ 对于基本类型的变量，它们都是值类型，因此直接进行值拷贝即可实现深拷贝。对于非基本类型的变量，由于其数据结构可能比较复杂，因此需要特殊处理才能实现深拷贝。&lt;/p>
+&lt;h4 id="常用的深拷贝方法">常用的深拷贝方法：&lt;/h4>
+&lt;ol>
+&lt;li>手动复制：通过循环遍历源对象的每个元素，并逐一复制到新的对象中，来实现深拷贝。这种方法需要手动编写代码，比较繁琐，但可以精确控制每个元素的复制过程。&lt;/li>
+&lt;li>使用库函数：Go 中有一些库函数可以帮助实现深拷贝，例如 reflect 包中的 Clone() 函数、&lt;a href="http://github.com/mohae/deepcopy">github.com/mohae/deepcopy&lt;/a> 包等。这些库函数通常使用反射技术来自动复制对象的结构和内容，使用起来比较方便，但有一定的性能开销。&lt;/li>
+&lt;/ol>
+&lt;p>注意：在使用深拷贝时，由于需要对原始对象进行完全的复制，因此可能会导致性能问题和内存消耗问题。此外，对于包含循环引用的对象，深拷贝也可能会出现无限递归的情况，需要特别注意。&lt;/p>
+&lt;h3 id="go中数据类型的深浅拷贝">Go中数据类型的深浅拷贝&lt;/h3>
+&lt;p>深拷贝数据类型：&lt;/p>
+&lt;blockquote>
+&lt;p>在传递时进行值拷贝。&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>数值类型（int、float、bool等）&lt;/li>
+&lt;li>字符串类型（string）&lt;/li>
+&lt;li>数组类型（array）&lt;/li>
+&lt;li>结构体类型（struct），但要求结构体中没有指针或引用类型的字段&lt;/li>
+&lt;/ul>
+&lt;p>浅拷贝数据类型：&lt;/p>
+&lt;blockquote>
+&lt;p>在传递时不会进行值拷贝，而是传递其引用或指针。&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>指针类型：使用 * 表示，例如 *int，表示一个指向 int 类型变量的指针。&lt;/li>
+&lt;li>slice 类型：使用 [] 表示，例如 []int，表示一个 int 类型的 slice（切片）。&lt;/li>
+&lt;li>map 类型：使用 map 表示，例如 map[string]int，表示一个键为字符串类型，值为 int 类型的 map（字典）。&lt;/li>
+&lt;li>channel 类型：使用 chan 表示，例如 chan int，表示一个 int 类型的 channel（通道），用于协程之间的通信。&lt;/li>
+&lt;li>这些类型在传递时都是传递其引用或指针，因此对它们的修改会影响原始数据的内容。&lt;/li>
+&lt;/ul>
+&lt;h2 id="go语言浅拷贝深拷贝定义及用法">go语言浅拷贝，深拷贝定义及用法&lt;/h2>
+&lt;p>浅拷贝是指只复制对象的值，而不复制对象的引用。&lt;/p>
+&lt;p>深拷贝是指复制对象的值和引用，以及引用的对象的值和引用，以此类推。&lt;/p>
+&lt;p>浅拷贝和深拷贝的区别在于是否影响原对象的状态。&lt;/p>
+&lt;p>浅拷贝的例子：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-go" data-lang="go">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">a&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> []&lt;span style="color:#66d9ef">int&lt;/span>{&lt;span style="color:#ae81ff">1&lt;/span>, &lt;span style="color:#ae81ff">2&lt;/span>, &lt;span style="color:#ae81ff">3&lt;/span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">b&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> &lt;span style="color:#a6e22e">a&lt;/span> &lt;span style="color:#75715e">// 浅拷贝
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#a6e22e">b&lt;/span>[&lt;span style="color:#ae81ff">0&lt;/span>] = &lt;span style="color:#ae81ff">4&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">fmt&lt;/span>.&lt;span style="color:#a6e22e">Println&lt;/span>(&lt;span style="color:#a6e22e">a&lt;/span>) &lt;span style="color:#75715e">// [4 2 3]
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#a6e22e">fmt&lt;/span>.&lt;span style="color:#a6e22e">Println&lt;/span>(&lt;span style="color:#a6e22e">b&lt;/span>) &lt;span style="color:#75715e">// [4 2 3]
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>在这个例子中，a和b都是切片类型，它们底层是一个数组的引用。当我们把a赋值给b时，只是复制了a的值，也就是数组的引用。所以，当我们修改b的第一个元素时，也就修改了a的第一个元素，因为它们指向同一个数组。&lt;/p>
+&lt;p>深拷贝的例子：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-go" data-lang="go">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">a&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> []&lt;span style="color:#66d9ef">int&lt;/span>{&lt;span style="color:#ae81ff">1&lt;/span>, &lt;span style="color:#ae81ff">2&lt;/span>, &lt;span style="color:#ae81ff">3&lt;/span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">b&lt;/span> &lt;span style="color:#f92672">:=&lt;/span> make([]&lt;span style="color:#66d9ef">int&lt;/span>, len(&lt;span style="color:#a6e22e">a&lt;/span>)) &lt;span style="color:#75715e">// 创建一个新的切片
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>copy(&lt;span style="color:#a6e22e">b&lt;/span>, &lt;span style="color:#a6e22e">a&lt;/span>) &lt;span style="color:#75715e">// 深拷贝
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#a6e22e">b&lt;/span>[&lt;span style="color:#ae81ff">0&lt;/span>] = &lt;span style="color:#ae81ff">4&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">fmt&lt;/span>.&lt;span style="color:#a6e22e">Println&lt;/span>(&lt;span style="color:#a6e22e">a&lt;/span>) &lt;span style="color:#75715e">// [1 2 3]
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#a6e22e">fmt&lt;/span>.&lt;span style="color:#a6e22e">Println&lt;/span>(&lt;span style="color:#a6e22e">b&lt;/span>) &lt;span style="color:#75715e">// [4 2 3]
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>在这个例子中，我们使用make函数创建了一个新的切片b，并使用copy函数将a的元素复制到b中。这样，b就有了自己的底层数组，和a没有关联。所以，当我们修改b的第一个元素时，不会影响a的第一个元素。&lt;/p>
+&lt;p>浅拷贝和深拷贝的用法取决于我们的需求。如果我们不想改变原对象的状态，或者原对象是不可变的（如字符串），那么可以使用浅拷贝。如果我们想创建一个独立的副本，或者原对象是可变的（如切片、映射、结构体等），那么可以使用深拷贝。&lt;/p></description></item></channel></rss>
